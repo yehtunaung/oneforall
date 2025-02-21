@@ -42,26 +42,32 @@ $watch('darkMode', value => {
 
 <body class="font-sans antialiased">
 
-    <div class="min-h-screen bg-gray-100">
-        <x-layout.navbar />
-        {{-- <x-layout.sidebar /> --}}
+ <div>
+    <x-layout.navbar/>
+    <x-layout.sidebar/>
+    <main>
+        {{ $slot }}
+    </main>
+</div>
 
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.store('sidebar', {
+            isSidebarOpen: true
+        });
+        Alpine.store('darkMode', {
+            value: localStorage.getItem('darkMode') === 'true',
+            toggle() {
+                this.value = !this.value;
+                localStorage.setItem('darkMode', this.value);
+            },
+            init() {
+                this.value = localStorage.getItem('darkMode') === 'true';
+            }
+        });
+    });
+</script>
 
-        <!-- Page Heading -->
-        @if (isset($header))
-            <header class="bg-white shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            </header>
-        @endif
-
-        <!-- Page Content -->
-        <main>
-            {{ $slot }}
-            
-        </main>
-    </div>
 
     
     @stack('modals')
