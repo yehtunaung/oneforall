@@ -9,6 +9,24 @@ Alpine.plugin(focus);
 window.Alpine = Alpine;
 
 Alpine.start();
+// Livewire.start();
 
+function initializeFlowbite() {
+    initFlowbite();
+}
+
+document.addEventListener("livewire:navigating", () => {
+    initializeFlowbite();
+});
+
+document.addEventListener("livewire:navigated", () => {
+    initializeFlowbite();
+});
+document.addEventListener("livewire:load", () => {
+    initializeFlowbite();
+});
+
+// Initialize on page load
+initializeFlowbite();
 
 

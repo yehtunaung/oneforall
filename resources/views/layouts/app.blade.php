@@ -12,12 +12,17 @@
                 window.matchMedia('(prefers-color-scheme: dark)').matches
             );
         }
+    },
+    isSidebarOpen: window.innerWidth > 900, // Initialize sidebar state based on screen size
+    updateSidebarState() {
+        this.isSidebarOpen = window.innerWidth > 900;
     }
 }" x-init="updateDarkMode();
 $watch('darkMode', value => {
     localStorage.setItem('darkMode', value);
     updateDarkMode();
-})"
+});
+window.addEventListener('resize', updateSidebarState);"
     :class="{
         'dark': darkMode === 'dark' || (darkMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)')
             .matches)
@@ -40,38 +45,48 @@ $watch('darkMode', value => {
     @livewireStyles
 </head>
 
-<body class="font-sans antialiased">
+<body class="font-sans bg-gray-50 dark:bg-gray-700 antialiased">
+    <div>
+        <x-layout.navbar />
+        <x-layout.sidebar />
+        <div x-data>
+            <main :class="{ 'ml-0': !$store.sidebar.isSidebarOpen, 'lg:ml-64': $store.sidebar.isSidebarOpen }"
+                class="p-4 h-auto pt-20 transition-all duration-300 ease-in-out ">
+                {{ $slot }}
+            </main>
+        </div>
+    </div>
 
- <div>
-    <x-layout.navbar/>
-    <x-layout.sidebar/>
-    <main>
-        {{ $slot }}
-    </main>
-</div>
-
-<script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.store('sidebar', {
-            isSidebarOpen: true
-        });
-        Alpine.store('darkMode', {
-            value: localStorage.getItem('darkMode') === 'true',
-            toggle() {
-                this.value = !this.value;
-                localStorage.setItem('darkMode', this.value);
-            },
-            init() {
-                this.value = localStorage.getItem('darkMode') === 'true';
-            }
-        });
-    });
-</script>
-
-
-    
     @stack('modals')
     @livewireScripts
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('sidebar', {
+                isSidebarOpen: window.innerWidth > 900,
+                toggle() {
+                    this.isSidebarOpen = !this.isSidebarOpen;
+                    localStorage.setItem('isSidebarOpen', this
+                        .isSidebarOpen); // Store sidebar state in localStorage
+                },
+                close() {
+                    this.isSidebarOpen = false;
+                    localStorage.setItem('isSidebarOpen', false); // Store sidebar state in localStorage
+                },
+                open() {
+                    this.isSidebarOpen = true;
+                    localStorage.setItem('isSidebarOpen', true); // Store sidebar state in localStorage
+                },
+                init() {
+                    // Update sidebar state on window resize and load from localStorage
+                    this.isSidebarOpen = JSON.parse(localStorage.getItem('isSidebarOpen')) || window
+                        .innerWidth > 900;
+                    window.addEventListener('resize', () => {
+                        this.isSidebarOpen = window.innerWidth > 900;
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
