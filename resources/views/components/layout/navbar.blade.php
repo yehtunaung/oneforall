@@ -234,18 +234,16 @@
                     class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                     id="user-menu-button" aria-expanded="false" data-dropdown-toggle="dropdown">
                     <span class="sr-only">Open user menu</span>
-                    <img class="w-8 h-8 rounded-full"
-                        src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/michael-gough.png"
-                        alt="user photo" />
+                    <img class="w-8 h-8 rounded-full" src="{{ Auth::user()->profile_photo_url }}" alt="user photo" />
                 </button>
 
                 <!-- Dropdown menu -->
-                <div class="hidden z-50 my-4 w-56 text-base list-none bg-white rounded-lg shadow-md dark:bg-gray-800 dark:divide-gray-600 divide-gray-100 rounded-xl"
+                <div class="hidden z-50 my-4 w-56 text-base list-none divide-y divide-gray-100  bg-white rounded-lg shadow-md dark:bg-gray-800 dark:divide-gray-600 divide-gray-100 rounded-xl"
                     id="dropdown" x-data="{ darkMode: localStorage.getItem('darkMode') || 'system' }">
 
                     <div class="py-3 px-4 text-center">
-                        <span class="block text-sm font-semibold text-gray-900 dark:text-white">Neil Sims</span>
-                        <span class="block text-sm text-gray-900 truncate dark:text-gray-400">name@flowbite.com</span>
+                        <span class="block text-sm font-semibold text-gray-900 dark:text-white"> {{ Auth::user()->name }}</span>
+                        <span class="block text-sm text-gray-900 truncate dark:text-gray-400">{{ Auth::user()->email }}</span>
                     </div>
                     <div class="py-2 flex justify-around text-gray-700 dark:text-gray-300" aria-labelledby="dropdown">
                         <!-- System Mode -->
