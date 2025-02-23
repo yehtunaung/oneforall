@@ -7,6 +7,7 @@ import '@fortawesome/fontawesome-free/js/all.js';
 Alpine.plugin(focus);
 
 window.Alpine = Alpine;
+Alpine.plugin(persist);
 
 Alpine.start();
 // Livewire.start();
