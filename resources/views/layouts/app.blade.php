@@ -1,28 +1,12 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" x-data="{
+    isSidebarOpen: window.innerWidth > 900,
     darkMode: localStorage.getItem('darkMode') || 'system',
-    updateDarkMode() {
-        if (this.darkMode === 'dark') {
-            document.documentElement.classList.add('dark');
-        } else if (this.darkMode === 'light') {
-            document.documentElement.classList.remove('dark');
-        } else {
-            document.documentElement.classList.toggle(
-                'dark',
-                window.matchMedia('(prefers-color-scheme: dark)').matches
-            );
-        }
-    },
-    isSidebarOpen: window.innerWidth > 900, // Initialize sidebar state based on screen size
     updateSidebarState() {
         this.isSidebarOpen = window.innerWidth > 900;
     }
-}" x-init="updateDarkMode();
-$watch('darkMode', value => {
-    localStorage.setItem('darkMode', value);
-    updateDarkMode();
-});
-window.addEventListener('resize', updateSidebarState);"
+}" x-init="window.addEventListener('resize', updateSidebarState);
+$watch('darkMode', value => localStorage.setItem('darkMode', value));"
     :class="{
         'dark': darkMode === 'dark' || (darkMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)')
             .matches)
@@ -63,31 +47,42 @@ window.addEventListener('resize', updateSidebarState);"
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.store('sidebar', {
-                isSidebarOpen: window.innerWidth > 900,
+                isSidebarOpen: JSON.parse(localStorage.getItem('isSidebarOpen')) ?? (window.innerWidth >
+                    900),
                 toggle() {
                     this.isSidebarOpen = !this.isSidebarOpen;
-                    localStorage.setItem('isSidebarOpen', this
-                        .isSidebarOpen); // Store sidebar state in localStorage
+                    localStorage.setItem('isSidebarOpen', this.isSidebarOpen);
                 },
                 close() {
                     this.isSidebarOpen = false;
-                    localStorage.setItem('isSidebarOpen', false); // Store sidebar state in localStorage
+                    localStorage.setItem('isSidebarOpen', false);
                 },
                 open() {
                     this.isSidebarOpen = true;
-                    localStorage.setItem('isSidebarOpen', true); // Store sidebar state in localStorage
+                    localStorage.setItem('isSidebarOpen', true);
                 },
                 init() {
-                    // Update sidebar state on window resize and load from localStorage
-                    this.isSidebarOpen = JSON.parse(localStorage.getItem('isSidebarOpen')) || window
-                        .innerWidth > 900;
                     window.addEventListener('resize', () => {
-                        this.isSidebarOpen = window.innerWidth > 900;
+                        if (window.innerWidth > 900) {
+                            this.isSidebarOpen = true;
+                            localStorage.setItem('isSidebarOpen', true);
+                        }
                     });
                 }
             });
+
+            document.addEventListener('livewire:navigated', () => {
+                Alpine.store('sidebar').isSidebarOpen = JSON.parse(localStorage.getItem('isSidebarOpen')) ??
+                    (window.innerWidth > 900);
+
+                document.documentElement.classList.toggle('dark', localStorage.getItem('darkMode') ===
+                    'dark' ||
+                    (localStorage.getItem('darkMode') === 'system' && window.matchMedia(
+                        '(prefers-color-scheme: dark)').matches));
+            });
         });
     </script>
+
 </body>
 
 </html>

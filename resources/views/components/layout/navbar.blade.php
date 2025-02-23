@@ -230,71 +230,6 @@
                     </a>
                 </div>
 
-                {{-- Dark Mode --}}
-                <div x-data="{
-                    darkMode: localStorage.getItem('darkMode') || 'system',
-                    dropdownOpen: false
-                }" x-init="$watch('darkMode', value => {
-                    if (value === 'dark') {
-                        document.documentElement.classList.add('dark');
-                        document.documentElement.classList.remove('transition-all');
-                    } else if (value === 'light') {
-                        document.documentElement.classList.remove('dark');
-                        document.documentElement.classList.add('transition-all');
-                    } else {
-                        document.documentElement.classList.toggle('dark', window.matchMedia('(prefers-color-scheme: dark)').matches);
-                    }
-                    localStorage.setItem('darkMode', value);
-                })" class="relative inline-block text-left">
-
-                    <!-- Dropdown Toggle Button -->
-                    <button @click="dropdownOpen = !dropdownOpen"
-                        class="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg shadow-sm hover:bg-gray-300 dark:hover:bg-gray-600 transition">
-
-                        <!-- Dark Mode Icon -->
-                        <i class="fa-solid"
-                            :class="{
-                                'fa-moon': darkMode === 'dark',
-                                'fa-regular fa-sun': darkMode === 'light',
-                                'fa-desktop': darkMode === 'system'
-                            }"></i>
-
-                    </button>
-
-                    <!-- Dropdown Menu -->
-                    <div x-show="dropdownOpen" @click.away="dropdownOpen = false"
-                        x-transition:enter="transition ease-out duration-200 transform"
-                        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                        x-transition:leave="transition ease-in duration-150 transform"
-                        x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
-                        class="absolute mt-2 bg-white dark:bg-gray-700 overflow-hidden text-gray-900 dark:text-gray-100 rounded-lg shadow-lg w-40 z-50">
-                        <ul class="py-1">
-                            <!-- System Option -->
-                            <li>
-                                <button @click="darkMode = 'system'; dropdownOpen = false"
-                                    class="flex items-center gap-2 w-full px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 transition">
-                                    <i class="fa-solid fa-desktop"></i> System
-                                </button>
-                            </li>
-                            <!-- Dark Mode Option -->
-                            <li>
-                                <button @click="darkMode = 'dark'; dropdownOpen = false"
-                                    class="flex items-center gap-2 w-full px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 transition">
-                                    <i class="fa-solid fa-moon"></i> Dark
-                                </button>
-                            </li>
-                            <!-- Light Mode Option -->
-                            <li>
-                                <button @click="darkMode = 'light'; dropdownOpen = false"
-                                    class="flex items-center gap-2 w-full px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 transition">
-                                    <i class="fa-solid fa-sun"></i> Light
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                {{-- Dark Mode End --}}
-
                 <button type="button"
                     class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                     id="user-menu-button" aria-expanded="false" data-dropdown-toggle="dropdown">
@@ -305,37 +240,67 @@
                 </button>
 
                 <!-- Dropdown menu -->
-                <div class="hidden z-50 my-4 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600 rounded-xl"
-                    id="dropdown">
-                    <div class="py-3 px-4">
+                <div class="hidden z-50 my-4 w-56 text-base list-none bg-white rounded-lg shadow-md dark:bg-gray-800 dark:divide-gray-600 divide-gray-100 rounded-xl"
+                    id="dropdown" x-data="{ darkMode: localStorage.getItem('darkMode') || 'system' }">
+
+                    <div class="py-3 px-4 text-center">
                         <span class="block text-sm font-semibold text-gray-900 dark:text-white">Neil Sims</span>
-                        <span class="block text-sm text-gray-900 truncate dark:text-white">name@flowbite.com</span>
+                        <span class="block text-sm text-gray-900 truncate dark:text-gray-400">name@flowbite.com</span>
                     </div>
-                    <ul class="py-1 text-gray-700 dark:text-gray-300" aria-labelledby="dropdown">
+                    <div class="py-2 flex justify-around text-gray-700 dark:text-gray-300" aria-labelledby="dropdown">
+                        <!-- System Mode -->
+                        <div class="w-16">
+                            <button
+                                @click="darkMode = 'system'; localStorage.setItem('darkMode', 'system'); window.location.reload();"
+                                class="flex items-center justify-center gap-2 w-full py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition ease-in-out"
+                                :class="{ 'bg-gray-200 dark:bg-gray-600': darkMode === 'system' }">
+                                <i class="fa-solid fa-desktop text-gray-700 dark:text-gray-300"></i>
+                            </button>
+                        </div>
+                        <!-- Dark Mode -->
+                        <div class="w-16">
+                            <button
+                                @click="darkMode = 'dark'; localStorage.setItem('darkMode', 'dark'); document.documentElement.classList.add('dark');"
+                                class="flex items-center justify-center gap-2 w-full py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition ease-in-out"
+                                :class="{ 'bg-gray-200 dark:bg-gray-600': darkMode === 'dark' }">
+                                <i class="fa-solid fa-moon text-gray-700 dark:text-gray-300"></i>
+                            </button>
+                        </div>
+                        <!-- Light Mode -->
+                        <div class="w-16">
+                            <button
+                                @click="darkMode = 'light'; localStorage.setItem('darkMode', 'light'); document.documentElement.classList.remove('dark');"
+                                class="flex items-center justify-center gap-2 w-full py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition ease-in-out"
+                                :class="{ 'bg-gray-200 dark:bg-gray-600': darkMode === 'light' }">
+                                <i class="fa-solid fa-sun text-gray-700 dark:text-gray-300"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <ul class="py-1 text-gray-700 dark:text-gray-300">
                         <li>
-                            <a href="{{ route('profile.show') }} " wire:navigate
-                                class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white">My
+                            <a href="{{ route('profile.show') }}" wire:navigate
+                                class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white rounded transition">My
                                 profile</a>
                         </li>
                         <li>
                             <a href="#"
-                                class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white">Account
+                                class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white rounded transition">Account
                                 settings</a>
                         </li>
                     </ul>
-                    </ul>
-                    <ul class="py-1 text-gray-700 dark:text-gray-300" aria-labelledby="dropdown">
+                    <ul class="py-1 text-gray-700 dark:text-gray-300">
                         <li>
                             <form method="POST" action="{{ route('logout') }}" x-data>
                                 @csrf
                                 <a href="#"
-                                    class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                    href="{{ route('logout') }}" @click.prevent="$root.submit();">Sign
-                                    out</a>
+                                    class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white rounded transition"
+                                    @click.prevent="$root.submit();">Sign out</a>
                             </form>
                         </li>
                     </ul>
                 </div>
+
+
             </div>
         </div>
     </nav>
