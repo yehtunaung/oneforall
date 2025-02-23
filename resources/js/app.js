@@ -4,13 +4,13 @@ import persist from '@alpinejs/persist';
 import 'flowbite';
 import '@fortawesome/fontawesome-free/js/all.js';
 
-Alpine.plugin(focus);
+if (!window.Alpine) {
+    Alpine.plugin(focus);
+    Alpine.plugin(persist);
+    window.Alpine = Alpine;
+    Alpine.start();
+}
 
-window.Alpine = Alpine;
-Alpine.plugin(persist);
-
-Alpine.start();
-// Livewire.start();
 
 function initializeFlowbite() {
     initFlowbite();

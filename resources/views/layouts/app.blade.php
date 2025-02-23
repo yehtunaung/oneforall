@@ -50,7 +50,8 @@ window.addEventListener('resize', updateSidebarState);"
         <x-layout.navbar />
         <x-layout.sidebar />
         <div x-data>
-            <main :class="{ 'ml-0': !$store.sidebar.isSidebarOpen, 'lg:ml-64 md:ml-0 sm:ml-0': $store.sidebar.isSidebarOpen }"
+            <main
+                :class="{ 'ml-0': !$store.sidebar.isSidebarOpen, 'lg:ml-64 md:ml-0 sm:ml-0': $store.sidebar.isSidebarOpen }"
                 class="p-4 h-auto pt-20 transition-all duration-300 ease-in-out ">
                 {{ $slot }}
             </main>
