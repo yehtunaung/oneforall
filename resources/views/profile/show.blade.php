@@ -62,17 +62,23 @@
                 <div class="hidden px-6 py-5" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
                     @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::updatePasswords()))
                         <div class="mt-10 sm:mt-0">
-                            {{-- @livewire('auth.update-password-form') --}}
+                            @livewire('profile.update-password-form')
 
                         </div>
-
                         <hr class="h-px w-full my-8 bg-gray-200 border-0 dark:bg-gray-700">
                     @endif
 
-                    {{-- @livewire('profile.logout-other-browser-sessions-form') --}}
+                        <div class="px-6">
+                            @livewire('profile.logout-other-browser-sessions-form')
+                        <hr class="h-px w-full my-8 bg-gray-200 border-0 dark:bg-gray-700">
+                        </div>
+                        
+                        <div class="">
+                            @livewire('profile.two-factor-authentication-form')
+                            <hr class="h-px w-full my-8 bg-gray-200 border-0 dark:bg-gray-700">
+                        </div>
 
-                    {{-- @livewire('auth.logout-other-browser-sessions-form')
-                    @livewire('auth.two-factor-authentication-form') --}}
+                        @livewire('profile.delete-user-form')
                 </div>
             </div>
         </x-card>

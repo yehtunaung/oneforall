@@ -54,10 +54,10 @@
         @endif
 
         
-        <x-inputs.form-input type="text" id="name" label="Name" placeholder="Enter your name" 
+        <x-inputs.form-input type="text" id="name" label="Name" placeholder="Enter your name" required="true"
             extra="wire:model.defer='state.name'" />
 
-        <x-inputs.form-input type="email" id="email" label="Email" placeholder="Enter your email" 
+        <x-inputs.form-input type="email" id="email" label="Email" placeholder="Enter your email"  required="true"
             extra="wire:model.defer='state.email'" />
 
         @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::emailVerification()) &&
