@@ -18,6 +18,7 @@ export default {
     theme: {
         extend: {
             colors: {
+                // this is the color for website
                 "primary": {
                     50: "#FEF9F6",
                     100: "#FCEFE8",
