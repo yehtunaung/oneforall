@@ -24,7 +24,7 @@
                                   reader.readAsDataURL($refs.photo.files[0]);
                           " />
 
-                <x-label for="photo" value="{{ __('Photo') }}" label="Photo" required="false" />
+                <x-admin.label for="photo" value="{{ __('Photo') }}" label="Photo" required="false" />
 
                 <!-- Current Profile Photo -->
                 <div class="mt-2 mb-3" x-show="! photoPreview">
@@ -49,7 +49,7 @@
                     </x-inputs.button-secondary>
                 @endif
 
-                {{-- <x-input-error for="photo" class="mt-2" /> --}}
+                {{-- <x-admin.inputs.input-error for="photo" class="mt-2" /> --}}
             </div>
         @endif
 

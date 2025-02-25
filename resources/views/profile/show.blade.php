@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="grid grid-cols-12 md:grid--cols-2 gap-4 mb-4">
-        <x-card
+        <x-admin.card
             class="col-span-12 md:col-span-5 xl:col-span-4 xxl:col-span-3 p-5 flex flex-col items-start py-8  border-t-4 dark:border-t-gray-500 border-t-primary-500">
             <div class="flex flex-col items-center w-full">
                 <img class="w-24 h-24 p-1 rounded-full ring-4 ring-secondary-300 dark:ring-gray-300"
@@ -26,7 +26,7 @@
             </p> --}}
         </x-card>
 
-        <x-card class="col-span-12 md:col-span-7 xl:col-span-8 xxl:col-span-9 px-0 p">
+        <x-admin.card class="col-span-12 md:col-span-7 xl:col-span-8 xxl:col-span-9 px-0 p">
             <div x-data="{ selectedIndex: 0 }" class="border-b border-gray-200 dark:border-gray-700">
                 <ul class="flex flex-wrap px-3 -mb-px text-sm font-medium text-center" id="userProfileTab"
                     data-tabs-toggle="#userProfileTabContent" role="tablist">

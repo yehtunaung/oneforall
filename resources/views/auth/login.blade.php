@@ -1,10 +1,10 @@
 <x-guest-layout>
-    <x-authentication-card>
+    <x-admin.auth.authentication-card>
         <x-slot name="logo">
-            <x-authentication-card-logo />
+            <x-admin.auth.authentication-card-logo />
         </x-slot>
 
-        <x-validation-errors class="mb-4" />
+        <x-admin.auth.validation-errors class="mb-4" />
 
         @session('status')
             <div class="mb-4 font-medium text-sm text-green-600">
@@ -16,18 +16,18 @@
             @csrf
 
             <div>
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+                <x-admin.label for="email" value="{{ __('Email') }}" />
+                <x-admin.inputs.input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')"  autofocus autocomplete="username" />
             </div>
 
             <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
+                <x-admin.label for="password" value="{{ __('Password') }}" />
+                <x-admin.inputs.input id="password" class="block mt-1 w-full" type="password" name="password"  autocomplete="current-password" />
             </div>
 
             <div class="block mt-4">
                 <label for="remember_me" class="flex items-center">
-                    <x-checkbox id="remember_me" name="remember" />
+                    <x-admin.inputs.checkbox id="remember_me" name="remember" />
                     <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
                 </label>
             </div>
@@ -39,10 +39,10 @@
                     </a>
                 @endif
 
-                <x-button class="ms-4">
+                <x-admin.inputs.button-primary class="ms-4">
                     {{ __('Log in') }}
-                </x-button>
+                </x-admin.inputs.button-primary>
             </div>
         </form>
-    </x-authentication-card>
+    </x-admin.auth.authentication-card>
 </x-guest-layout>

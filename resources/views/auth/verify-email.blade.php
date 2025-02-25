@@ -1,7 +1,7 @@
 <x-guest-layout>
-    <x-authentication-card>
+    <x-admin.auth.authentication-card>
         <x-slot name="logo">
-            <x-authentication-card-logo />
+            <x-admin.auth.authentication-card-logo />
         </x-slot>
 
         <div class="mb-4 text-sm text-gray-600">
@@ -19,7 +19,7 @@
                 @csrf
 
                 <div>
-                    <x-button type="submit">
+                    <x-admin.inputs.button-primary type="submit">
                         {{ __('Resend Verification Email') }}
                     </x-button>
                 </div>
@@ -41,5 +41,5 @@
                 </form>
             </div>
         </div>
-    </x-authentication-card>
+    </x-<x-admin.auth.authentication-card>
 </x-guest-layout>
