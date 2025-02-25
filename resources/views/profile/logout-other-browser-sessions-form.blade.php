@@ -52,8 +52,7 @@
             </div>
 
             <!-- Log Out Other Devices Confirmation Modal -->
-            <x-modal.modal-dialog wire:model="confirmingLogout">
-                {{-- <x-modal.modal-dialog show="@entangle('confirmingLogout')"> --}}
+            <x-admin.modal.modal-dialog wire:model="confirmingLogout">
                 <x-slot name="title">
                     {{ __('Log Out Other Browser Sessions') }}
                 </x-slot>
@@ -83,7 +82,7 @@
                         {{ __('Log Out Other Browser Sessions') }}
                     </x-inputs.button-secondary>
                 </x-slot>
-            </x-modal.modal-dialog>
+            </x-admin.modal.modal-dialog>
         @endif
     </div>
 </div>
