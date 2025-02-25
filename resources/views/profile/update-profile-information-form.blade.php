@@ -39,12 +39,12 @@
                         x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
                     </span>
                 </div>
-                <x-inputs.button-secondary class="mt-5 me-2" type="button" x-on:click.prevent="$refs.photo.click()">
+                <x-admin.inputs.button-secondary class="mt-5 me-2" type="button" x-on:click.prevent="$refs.photo.click()">
                     {{ __('Select A New Photo') }}
                 </x-inputs.button-secondary>
 
                 @if ($this->user->profile_photo_path)
-                    <x-inputs.button-secondary type="button" class="mt-2" wire:click="deleteProfilePhoto">
+                    <x-admin.inputs.button-secondary type="button" class="mt-2" wire:click="deleteProfilePhoto">
                         {{ __('Remove Photo') }}
                     </x-inputs.button-secondary>
                 @endif
@@ -54,10 +54,10 @@
         @endif
 
         
-        <x-inputs.form-input type="text" id="name" label="Name" placeholder="Enter your name" required="true"
+        <x-admin.inputs.form-input type="text" id="name" label="Name" placeholder="Enter your name" required="true"
             extra="wire:model.defer='state.name'" />
 
-        <x-inputs.form-input type="email" id="email" label="Email" placeholder="Enter your email"  required="true"
+        <x-admin.inputs.form-input type="email" id="email" label="Email" placeholder="Enter your email"  required="true"
             extra="wire:model.defer='state.email'" />
 
         @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::emailVerification()) &&
@@ -79,7 +79,7 @@
             @endif
         @endif
 
-        <x-inputs.button-primary class="mt-4" wire:loading.attr="disabled" wire:target="updateProfileInformation">
+        <x-admin.inputs.button-primary class="mt-4" wire:loading.attr="disabled" wire:target="updateProfileInformation">
             <i class="fa-solid fa-pen-to-square mr-2" wire:loading.class="fa-beat-fade"
                 wire:target="updateProfileInformation"></i>
             {{ __('Change') }}
