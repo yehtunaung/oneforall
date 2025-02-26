@@ -16,13 +16,13 @@
                 </div>
             </form>
             <x-layout.sub.sidebar-item label="{{ __('Dashboard') }}" icon="fa-solid fa-house"
-                route="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" />
+                route="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard')" />
             <x-layout.sub.sidebar-item label="{{ __('Members') }}" icon="fa-solid fa-users"
-                route="{{ route('dashboard') }}" :active="request()->routeIs('admin.dashboard')" />
+                route="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard')" />
             <x-layout.sub.sidebar-group id="" label="{{ __('User Management') }}"
-                icon="fa-solid fa-sack-dollar" :active="request()->routeIs('dashboard') || request()->routeIs('admin.classSchedules')">
-                <x-layout.sub.sidebar-group-item label="{{ __('User') }}" route="{{ route('dashboard') }}"
-                    :active="request()->routeIs('dashboard')" />
+                icon="fa-solid fa-sack-dollar" :active="request()->routeIs('admin.dashboard') || request()->routeIs('admin.classSchedules')">
+                <x-layout.sub.sidebar-group-item label="{{ __('User') }}" route="{{ route('admin.dashboard') }}"
+                    :active="request()->routeIs('admin.dashboard')" />
 
             </x-layout.sub.sidebar-group>
             </ul>
