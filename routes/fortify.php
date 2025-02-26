@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController as AuthAuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
@@ -35,7 +36,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     $twoFactorLimiter = config('fortify.limiters.two-factor');
     $verificationLimiter = config('fortify.limiters.verification', '6,1');
 
-    Route::post(RoutePath::for('admin/login', 'admin/login'), [AuthenticatedSessionController::class, 'store'])
+    Route::post(RoutePath::for('admin/login', 'admin/login'), [AuthAuthenticatedSessionController::class, 'store'])
         ->middleware(array_filter([
             'guest:' . config('fortify.guard'),
             $limiter ? 'throttle:' . $limiter : null,

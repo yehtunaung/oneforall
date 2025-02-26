@@ -33,6 +33,8 @@ $watch('darkMode', value => localStorage.setItem('darkMode', value));"
     <div>
         <x-layout.navbar />
         <x-layout.sidebar />
+        <x-admin.noti-message />
+
         <div x-data>
             <main
                 :class="{ 'ml-0': !$store.sidebar.isSidebarOpen, 'lg:ml-64 md:ml-0 sm:ml-0': $store.sidebar.isSidebarOpen }"
