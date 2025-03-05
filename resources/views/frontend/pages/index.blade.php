@@ -1,6 +1,3 @@
-@extends('frontend.layouts.app') <!-- Extend the main layout file -->
-
-@section('content') <!-- Define the content section -->
     <div class="font-sans antialiased bg-gray-900 text-white flex items-center justify-center h-screen">
         <!-- Page Content -->
         <main>
@@ -72,4 +69,3 @@
             </div>
         </main>
     </div>
-@endsection

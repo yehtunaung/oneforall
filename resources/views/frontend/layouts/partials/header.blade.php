@@ -9,10 +9,10 @@
 
         <!-- Navigation Links -->
         <div class="hidden md:flex space-x-8">
-            <a href="#" class="text-gray-300 hover:text-white transition duration-300">Home</a>
-            <a href="#" class="text-gray-300 hover:text-white transition duration-300">About</a>
-            <a href="#" class="text-gray-300 hover:text-white transition duration-300">Services</a>
-            <a href="#" class="text-gray-300 hover:text-white transition duration-300">Contact</a>
+            <a href="/" wire:navigate class="text-gray-300 hover:text-white transition duration-300">Home</a>
+            <a href="{{route('about')}}" wire:navigate class="text-gray-300 hover:text-white transition duration-300">About</a>
+            <a href="{{ route('service')}}" wire:navigate class="text-gray-300 hover:text-white transition duration-300">Services</a>
+            <a href="{{ route('contact')}}" wire:navigate class="text-gray-300 hover:text-white transition duration-300">Contact</a>
         </div>
 
         <!-- Dark Mode Toggle -->

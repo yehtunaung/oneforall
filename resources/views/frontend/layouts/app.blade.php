@@ -46,7 +46,7 @@ $watch('darkMode', value => {
 
     <!-- Page Content -->
     <main>
-        @yield('content')
+        {{ $slot }}
     </main>
 
     <!-- Footer -->
