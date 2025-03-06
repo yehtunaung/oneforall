@@ -29,7 +29,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', value));"
     @livewireStyles
 </head>
 
-<body class="font-sans bg-gray-50 dark:bg-gray-700 antialiased">
+<body class="font-sans bg-gray-50 dark:bg-gray-900 antialiased">
     <div>
         <x-layout.navbar />
         <x-layout.sidebar />

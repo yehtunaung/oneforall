@@ -1,8 +1,8 @@
 <div>
     <aside
-        class="fixed top-0 left-0 lg:z-40 w-64 h-screen pt-14 transition-transform duration-500 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700"
+        class="fixed top-0 left-0 lg:z-40 w-64 h-screen pt-14 transition-transform duration-500 bg-white border-r border-gray-200 dark:bg-gray-900 dark:border-gray-700"
         :class="{ '-translate-x-full': !$store.sidebar.isSidebarOpen, 'translate-x-0': $store.sidebar.isSidebarOpen }">
-        <div class="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-gray-800">
+        <div class="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-gray-900">
             <ul class="space-y-2">
                 <form action="#" method="GET" class=" mb-2">
                     <label for="sidebar-search" class="sr-only">Search</label>
