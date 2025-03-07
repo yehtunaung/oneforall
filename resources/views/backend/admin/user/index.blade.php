@@ -1,13 +1,13 @@
 <div>
-    <x-admin.pages-header title="Users" :breadcrumbs="[['label' => 'Users', 'url' => route('admin.user')], ['label' => 'List']]" :permission="true" />
-
+    <x-admin.pages-header title="Users" :breadcrumbs="[['label' => 'Users', 'url' => route('admin.user')], ['label' => 'List']]" :permission="true" :route="route('admin.user',['action' => 'create'])" />
 
     <!-- Table Container -->
     <div class="rounded-lg shadow-lg bg-primary-500 ">
         <!-- Search and Filters -->
         <div class="flex flex-wrap items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-t-xl">
-            <input type="text" wire:model.debounce.500ms="search" placeholder="Search users..."
-                class="px-4 py-2 border rounded-lg text-sm focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-white dark:border-gray-600">
+               <div class="w-22">
+                <x-admin.inputs.input re:model.debounce.500ms="search" placeholder="Search users..."></x-admin.inputs.input>
+               </div>
 
             <div x-data="{ open: false }" class="relative">
                 <button @click="open = !open"
@@ -89,6 +89,6 @@
 
     <!-- Pagination -->
     <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-b-xl">
-        {{-- {{ $users->links() }} --}}
+        {{ $users->links() }}
     </div>
 </div>

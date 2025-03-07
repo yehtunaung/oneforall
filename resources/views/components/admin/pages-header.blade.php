@@ -2,7 +2,7 @@
     'title' => 'Page Title', // Default title if not provided
     'breadcrumbs' => [], // Array of breadcrumbs
     'permission' => false, // Control button visibility
-    'createRoute' => '#',
+    'route' => '#',
 ])
 
 <!-- Breadcrumb -->
@@ -42,9 +42,11 @@
 <div class="pb-6 flex flex-wrap items-center justify-between">
     <h2 class="text-xl font-semibold text-gray-800 dark:text-white">{{ $title }}</h2>
 
-    {{-- @can ($permission) --}}
-        <x-admin.inputs.button-primary type="button" wire:click="create" wire:navigate>
+    {{-- @can($permission) --}}
+    @if ($permission)
+        <x-admin.inputs.button-primary type="button" href="{{ $route }}" wire:navigate>
             <i class="fa-solid fa-user-plus mr-2"></i>{{ __('Create') }}
         </x-admin.inputs.button-primary>
+    @endif
     {{-- @endcan --}}
 </div>

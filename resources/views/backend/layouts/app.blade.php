@@ -84,6 +84,19 @@ $watch('darkMode', value => localStorage.setItem('darkMode', value));"
             });
         });
     </script>
+    <script>
+        Livewire.on('navigate', (url) => {
+            window.Livewire.navigate(url);
+        });
+    </script>
+
+    {{-- <script>
+        document.addEventListener('livewire:navigate', event => {
+            window.history.pushState({}, '', event.detail.url);
+            window.dispatchEvent(new PopStateEvent('popstate'));
+        });
+    </script> --}}
+    
 
 </body>
 

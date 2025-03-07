@@ -1,5 +1,5 @@
 <!-- Table Component -->
-<div class=" rounded-lg shadow-lg bg-white dark:bg-gray-800">
+<div class="rounded-lg shadow-lg bg-white dark:bg-gray-800">
     <div class="lg:overflow-visible md:overflow-visible sm:overflow-x-auto">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 border-collapse border-separate border-spacing-0">
             
