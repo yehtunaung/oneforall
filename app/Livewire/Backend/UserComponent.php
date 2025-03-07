@@ -42,12 +42,10 @@ public function store()
         'password' => bcrypt($this->password)
     ]);
 
-    // Flash message
     session()->flash('message', 'User created successfully!');
     session()->flash('type', 'success');
+    return $this->redirect('/admin/users', navigate: true);
 
-    // Redirect to the user list page
-    return redirect()->to('/admin/users');
 }
 
 
