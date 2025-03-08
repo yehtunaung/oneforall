@@ -5,11 +5,12 @@ namespace App\Livewire\Backend;
 use App\Models\User;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Livewire\Features\SupportPagination\WithoutUrlPagination;
 use Livewire\WithPagination;
 
 class UserComponent extends Component
 {
-    use WithPagination;
+    use WithPagination,WithoutUrlPagination;
 
     #[Layout('backend.layouts.app')]
     public $currentPage = 'list' , $name , $email , $password , $user_id , $currentUrl;
@@ -58,7 +59,7 @@ public function store()
                 return view('backend.admin.user.edit');
             default:
                 return view('backend.admin.user.index', [
-                    'users' => User::paginate(10) 
+                    'users' => User::paginate(40 ) 
                 ]);
         }
     }

@@ -1,13 +1,14 @@
 <div>
-    <x-admin.pages-header title="Users" :breadcrumbs="[['label' => 'Users', 'url' => route('admin.user')], ['label' => 'List']]" :permission="true" :route="route('admin.user',['action' => 'create'])" />
+    <x-admin.pages-header title="Users" :breadcrumbs="[['label' => 'Users', 'url' => route('admin.user')], ['label' => 'List']]" :permission="true" :route="route('admin.user', ['action' => 'create'])" />
 
     <!-- Table Container -->
     <div class="rounded-lg shadow-lg bg-primary-500 ">
         <!-- Search and Filters -->
         <div class="flex flex-wrap items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-t-xl">
-               <div class="w-22">
-                <x-admin.inputs.input re:model.debounce.500ms="search" placeholder="Search users..."></x-admin.inputs.input>
-               </div>
+            <div class="w-22">
+                <x-admin.inputs.input re:model.debounce.500ms="search"
+                    placeholder="Search users..."></x-admin.inputs.input>
+            </div>
 
             <div x-data="{ open: false }" class="relative">
                 <button @click="open = !open"
@@ -20,6 +21,7 @@
                     <label class="block text-sm text-gray-700 dark:text-gray-300">Role:</label>
                     <select wire:model="roleFilter"
                         class="w-full mt-1 border rounded-lg dark:bg-gray-700 dark:text-white">
+                        <i class="fa-solid fa-sort ml-1"></i>
                         <option value="">All</option>
                         <option value="admin">Admin</option>
                         <option value="user">User</option>
@@ -28,7 +30,7 @@
             </div>
         </div>
 
-        {{-- Datatable --}}                                                         
+        {{-- Datatable --}}
         <x-admin.table>
             <!-- Header Slot -->
             <x-slot name="header">
@@ -49,7 +51,8 @@
             <!-- Body Slot -->
             <x-slot name="body">
                 @forelse($users as $index => $user)
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900">
+                    <tr
+                        class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900">
                         <td class="px-6 py-4">{{ $index + 1 }}</td>
                         <td class="px-6 py-4">{{ $user->name }}</td>
                         <td class="px-6 py-4">{{ $user->email }}</td>
@@ -89,6 +92,8 @@
 
     <!-- Pagination -->
     <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-b-xl">
-        {{ $users->links() }}
+        {{-- {{ $users->links() }} --}}
+        {{ $users->links(data: ['scrollTo' => true]) }}
+
     </div>
 </div>
