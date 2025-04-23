@@ -15,7 +15,7 @@
                     class="mx-auto mb-6 rounded-full animate-pulse">
 
                 <!-- Heading -->
-                <h1 class="text-6xl font-bold mb-4 animate-bounce">OneForAll</h1>
+                <h1 class="text-6xl font-bold mb-4 animate-bounce">ImpactTech</h1>
                 <p class="text-xl mb-8">Empowering your world with unified solutions. Something incredible is on the way!
                 </p>
 

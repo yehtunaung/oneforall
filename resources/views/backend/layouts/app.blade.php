@@ -27,6 +27,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', value));"
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!-- Styles -->
     @livewireStyles
+
 </head>
 
 <body class="font-sans bg-gray-50 dark:bg-gray-900 antialiased">
@@ -96,7 +97,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', value));"
             window.dispatchEvent(new PopStateEvent('popstate'));
         });
     </script> --}}
-    
+
 
 </body>
 

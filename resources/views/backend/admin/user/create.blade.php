@@ -24,15 +24,35 @@
                         @enderror
 
                     </div>
-
-                    <div class="w-full lg:w-1/3 px-2 mb-4">
+                    <div class="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
                         <x-admin.label for="password" label="Password" required="true" />
                         <x-admin.inputs.input id="password" label="Password" type="password" wire:model="password"
                             class="additional-classes" error="{{ $errors->has('password') }}" />
                         @error('password')
                             <span class="text-red-500">{{ $message }}</span>
                         @enderror
+
                     </div>
+
+
+
+                    <div class="w-full lg:w-1/3 px-2 mb-4">
+                        <x-admin.label for="roles" label="Role" required="true" />
+                        <x-admin.select id="roles" label="Roles" wire:model="roles"
+                            class="additional
+                        -classes" error="{{ $errors->has('roles') }}">
+                            <option value="">Select Role</option>
+                            @foreach ($availableRoles as $role)
+                                <option value="{{ $role->id }}">{{ $role->title }}</option>
+                            @endforeach
+                        </x-admin.select>
+                        @error('roles')
+                            <span class="text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+
+
                 </div>
             </div>
 

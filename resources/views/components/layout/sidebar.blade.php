@@ -17,13 +17,29 @@
                 </form>
                 <x-layout.sub.sidebar-item label="{{ __('Dashboard') }}" icon="fa-solid fa-house"
                     route="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard')" />
-
                 <x-layout.sub.sidebar-group id="" label="{{ __('UserManagement') }}" icon="fa-solid fa-users"
-                    :active="request()->routeIs('admin.user') || request()->routeIs('admin.classSchedules')">
-                    <x-layout.sub.sidebar-group-item label="{{ __('User') }}" route="{{ route('admin.user') }}"
-                        :active="request()->routeIs('admin.user')" />
+                    :active="request()->routeIs('admin.user') ||
+                        request()->routeIs('admin.permission') ||
+                        request()->routeIs('admin.role') ||
+                        request()->routeIs('admin.classSchedules')">
+
+                    @can('user_access')
+                        <x-layout.sub.sidebar-group-item label="{{ __('User') }}" route="{{ route('admin.user') }}"
+                            :active="request()->routeIs('admin.user')" />
+                    @endcan
+
+                    @can('permission_access')
+                        <x-layout.sub.sidebar-group-item label="{{ __('Permission') }}"
+                            route="{{ route('admin.permission') }}" :active="request()->routeIs('admin.permission')" />
+                    @endcan
+
+                    @can('role_access')
+                        <x-layout.sub.sidebar-group-item label="{{ __('Role') }}" route="{{ route('admin.role') }}"
+                            :active="request()->routeIs('admin.role')" />
+                    @endcan
 
                 </x-layout.sub.sidebar-group>
+
             </ul>
         </div>
     </aside>

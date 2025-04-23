@@ -1,12 +1,12 @@
 <div>
-    <x-admin.pages-header title="Users" :breadcrumbs="[['label' => 'Users', 'url' => route('admin.user')], ['label' => 'List']]" :permission="true" :route="route('admin.user', ['action' => 'create'])" />
+    <x-admin.pages-header title="Users" :breadcrumbs="[['label' => 'Users', 'url' => route('admin.user')], ['label' => 'List']]" :permission="Gate::check('user_create')" :route="route('admin.user', ['action' => 'create'])" />
 
     <!-- Table Container -->
     <div class="rounded-lg shadow-lg bg-primary-500 ">
         <!-- Search and Filters -->
         <div class="flex flex-wrap items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-t-xl">
             <div class="w-22">
-                <x-admin.inputs.input re:model.debounce.500ms="search"
+                <x-admin.inputs.input wire:model.live.debounce.500ms="search"
                     placeholder="Search users..."></x-admin.inputs.input>
             </div>
 
@@ -18,16 +18,34 @@
                 </button>
                 <div x-show="open" @click.away="open = false"
                     class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 shadow-lg rounded-lg p-4 z-10">
+
                     <label class="block text-sm text-gray-700 dark:text-gray-300">Role:</label>
-                    <select wire:model="roleFilter"
-                        class="w-full mt-1 border rounded-lg dark:bg-gray-700 dark:text-white">
-                        <i class="fa-solid fa-sort ml-1"></i>
-                        <option value="">All</option>
-                        <option value="admin">Admin</option>
-                        <option value="user">User</option>
-                    </select>
+
+                    <div class="relative">
+                        <x-admin.select wire:model="roleFilter" wire:change="filterUsers" class="additional-classes">
+                            <option value="">Select Role</option>
+                            @foreach ($availableRoles as $role)
+                                <option value="{{ $role->id }}">{{ $role->title }}</option>
+                            @endforeach
+                        </x-admin.select>
+
+
+                        <span wire:loading wire:target="roleFilter"
+                            class="absolute right-2 top-2 text-gray-500 dark:text-gray-300">
+                            <i class="fa-solid fa-spinner animate-spin"></i>
+
+                        </span>
+
+                    </div>
+
+                    @error('roles')
+                        <span class="text-red-500">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
+
+
+
         </div>
 
         {{-- Datatable --}}
@@ -56,25 +74,40 @@
                         <td class="px-6 py-4">{{ $index + 1 }}</td>
                         <td class="px-6 py-4">{{ $user->name }}</td>
                         <td class="px-6 py-4">{{ $user->email }}</td>
-                        <td class="px-6 py-4">{{ ucfirst($user->role) }}</td>
-                        <td class="px-6 py-4">{{ $user->created_at->format('d M, Y') }}</td>
+                        <td class="px-6 py-4">
+                            @foreach ($user->roles as $role)
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">{{ $role->title }}</span>
+                            @endforeach
+                        </td>
+                        <td class="px-6 py-4">{{ $user->created_at ? $user->created_at->format('d M, Y') : '-' }}</td>
                         <td class="px-6 py-4 relative">
-                            <div x-data="{ open: false }">
-                                <button @click="open = !open" class="text-gray-600 dark:text-gray-300">
-                                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                                </button>
-                                <div x-show="open" @click.away="open = false"
-                                    class="absolute right-0 mt-2 w-32 bg-white dark:bg-gray-700 shadow-lg rounded-lg p-2 z-20">
-                                    <button wire:click="edit({{ $user->id }})"
-                                        class="block w-full px-4 py-2 text-sm hover:bg-gray-200 dark:hover:bg-gray-700">
-                                        <i class="fa-solid fa-pen mr-2"></i> Edit
-                                    </button>
-                                    <button wire:click="delete({{ $user->id }})"
-                                        class="block w-full px-4 py-2 text-sm text-red-600 hover:bg-red-100 dark:text-red-400 dark:hover:bg-gray-700">
-                                        <i class="fa-solid fa-trash mr-2"></i> Delete
-                                    </button>
-                                </div>
-                            </div>
+                            <x-admin.action-dropdown>
+                                @can('user_show')
+                                    <li class="hover:bg-gray-100 dark:hover:bg-gray-600">
+                                        <a href="{{ route('admin.user', ['action' => 'show', 'id' => $user->id]) }}"
+                                            class="flex items-center gap-2 px-4 py-2" wire:navigate>
+                                            <i class="fa-solid fa-eye"></i> Show
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('user_edit')
+                                    <li class="hover:bg-gray-100 dark:hover:bg-gray-600">
+                                        <button href="{{ route('admin.user', ['action' => 'edit', 'id' => $user->id]) }}"
+                                            class="flex items-center gap-2 px-4 py-2" wire:navigate>
+                                            <i class="fa-solid fa-edit"></i> Edit
+                                        </button>
+                                    </li>
+                                @endcan
+                                @can('user_delete')
+                                    <li class="hover:bg-gray-100 dark:hover:bg-gray-600">
+                                        <a href="#" class="flex items-center gap-2 px-4 py-2"
+                                            wire:click.prevent='delete({{ $user->id }})' wire:confirm='Are you sure?'>
+                                            <i class="fa-solid fa-trash"></i> Delete
+                                        </a>
+                                    </li>
+                                @endcan
+                                </x-action-dropdown>
                         </td>
                     </tr>
                 @empty
@@ -86,6 +119,9 @@
                 @endforelse
             </x-slot>
         </x-admin.table>
+
+
+
 
 
     </div>

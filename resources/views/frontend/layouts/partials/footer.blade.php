@@ -3,7 +3,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- About Section -->
             <div>
-                <h3 class="text-xl font-bold mb-4">About OneForAll</h3>
+                <h3 class="text-xl font-bold mb-4">About ImpactTeh</h3>
                 <p class="text-gray-400">
                     Empowering your world with unified solutions. We provide cutting-edge software solutions tailored to your needs.
                 </p>

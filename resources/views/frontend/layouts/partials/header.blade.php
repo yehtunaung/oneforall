@@ -3,7 +3,7 @@
         <!-- Logo -->
         <div>
             <a href="/" class="text-2xl font-bold text-white hover:text-blue-500 transition duration-300">
-                OneForAll
+                ImpactTech
             </a>
         </div>
 
