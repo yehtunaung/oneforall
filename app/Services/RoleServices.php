@@ -51,7 +51,7 @@ class RoleServices
         // $permission = Role::with('permissions')->findOrFail($id);
         return $this->roleRepository->deleteData($id);
     }
-    public function getPaginatedRole($perPage = 5, $search)
+    public function getPaginatedRole($perPage = 5, $search = "")
     {
 
         // $query = Role::query();

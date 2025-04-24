@@ -8,10 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 trait PaginateModels
 {
 
+    /**
+     * Paginate Data
+     * @param \Illuminate\Database\Eloquent\Model $modelClass
+     * @param int $perPage
+     * @param array $options
+     * @return LengthAwarePaginator
+     */
     public function getPaginatedResults(
         Model $modelClass,
         int $perPage = 20,
-        array $options = []
+        ?array $options = []
     ): LengthAwarePaginator {
 
         $query = $modelClass::query();

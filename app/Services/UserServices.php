@@ -35,7 +35,7 @@ class UserServices
         return $this->userRepository->deleteData($id);
     }
 
-    public function getAllUsers($perPage = 40, $selectRole = null, $search)
+    public function getAllUsers($perPage = 40, $selectRole = null, $search = "")
     {
         // $query = User::query();
         // if ($selectRole) {

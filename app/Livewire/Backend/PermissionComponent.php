@@ -3,8 +3,10 @@
 namespace App\Livewire\Backend;
 
 use App\Services\PermissionServices;
-use Illuminate\Support\Facades\Gate;
-use Symfony\Component\HttpFoundation\Response;
+use App\Traits\HandleRedirections;
+use App\Traits\HandlePageState;
+use App\Traits\HandleFlashMessage;
+use App\Traits\AuthorizeRequests;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Features\SupportPagination\WithoutUrlPagination;
@@ -12,91 +14,94 @@ use Livewire\WithPagination;
 
 class PermissionComponent extends Component
 {
-    use WithPagination, WithoutUrlPagination;
+    use WithPagination, WithoutUrlPagination, AuthorizeRequests, HandleRedirections, HandlePageState, HandleFlashMessage;
+
     #[Layout('backend.layouts.app')]
+
     public $currentPage = 'list', $title, $permission_id;
-    public $search ='';
+    public $search = '';
 
     protected $permissionService;
+
+    protected $indexRoute = "admin/permission";
+    protected $createRoute, $editRoute, $showRoute;
 
     public function boot(PermissionServices $permissionService)
     {
         $this->permissionService = $permissionService;
-        abort_if(Gate::denies('permission_access'),Response::HTTP_FORBIDDEN, '403 FORBIDDEN');
+        $this->authorizeAccess('permission_access');
     }
     public function mount()
     {
-        abort_if(Gate::denies('permission_access'),Response::HTTP_FORBIDDEN, '403 FORBIDDEN');
-        if (request()->is('admin/permission/create')) {
-            $this->currentPage = 'create';
-        } elseif (request()->is('admin/permission/edit/*')) {
-            $this->edit(request()->route('id'));
-            $this->currentPage = 'edit';
-        } elseif (request()->is('admin/permission/show/*')) {
-            $this->show(request()->route('id'));
-            $this->currentPage = 'show';
-        } else {
-            $this->currentPage = 'list';
-        }
+        $this->createRoute = "{$this->indexRoute}/create";
+        $this->editRoute = "{$this->indexRoute}/edit/*";
+        $this->showRoute = "{$this->indexRoute}/show/*";
+
+        $this->authorizeAccess("permission_access");
+        $this->determineCurrentPage([
+            $this->createRoute => "create",
+            $this->editRoute => "edit",
+            $this->showRoute => "show"
+        ]);
     }
 
     public function create()
     {
-        abort_if(Gate::denies('permission_create'),Response::HTTP_FORBIDDEN, '403 FORBIDDEN');
+        $this->verifyAuthorization("permission_create");
         $this->resetPage();
-        $this->currentPage = 'create';
+        $this->currentPage = "create";
     }
 
     public function store()
     {
-        abort_if(Gate::denies('permission_create'),Response::HTTP_FORBIDDEN, '403 FORBIDDEN');
+        $this->verifyAuthorization("permission_create");
         $this->permissionService->createPermission([
             'title' => $this->title,
         ]);
-        session()->flash('message', 'Permission created successfully!');
-        session()->flash('type', 'success');
-        return $this->redirect('/admin/permission', navigate: true);
+
+        $this->flashMessage('Permission created successfully!', 'success');
+        return $this->redirectTo($this->indexRoute);
     }
 
     public function edit($id)
     {
-        abort_if(Gate::denies('permission_edit'),Response::HTTP_FORBIDDEN, '403 FORBIDDEN');
+        $this->verifyAuthorization('permission_edit');
         $permission = $this->permissionService->getPermissionById($id);
-        $this->permission_id = $permission->id;
         $this->title = $permission->title;
-        $this->currentPage = 'edit';
+        $this->permission_id = $permission->id;
+        $this->currentPage = "edit";
     }
 
     public function update()
     {
-        abort_if(Gate::denies('permission_edit'),Response::HTTP_FORBIDDEN, '403 FORBIDDEN');
+        $this->verifyAuthorization("permission_edit");
         $this->permissionService->updatePermission($this->permission_id, [
             'title' => $this->title,
         ]);
 
-        session()->flash('message', 'Permission updated successfully!');
+        $this->flashMessage('Permission updated successfully!', 'success');
         session()->flash('type', 'success');
 
-        return $this->redirect('/admin/permission', navigate: true);
+        return $this->redirectTo($this->indexRoute);
     }
 
     public function show($id)
     {
-        abort_if(Gate::denies('permission_show'),Response::HTTP_FORBIDDEN, '403 FORBIDDEN');
+        $this->verifyAuthorization('permission_edit');
         $permission = $this->permissionService->getPermissionById($id);
-        $this->permission_id = $permission->id;
         $this->title = $permission->title;
-        $this->currentPage = 'show';
+        $this->permission_id = $permission->id;
+        $this->currentPage = "show";
     }
 
     public function delete($id)
     {
-        abort_if(Gate::denies('permission_delete'),Response::HTTP_FORBIDDEN, '403 FORBIDDEN');
+        $this->verifyAuthorization("permission_delete");
         $this->permissionService->deletePermission($id);
 
-        session()->flash('message', 'Permission deleted successfully!');
-        session()->flash('type', 'success');
-        return $this->redirect('/admin/permission', navigate: true);
+        $this->flashMessage('Permission updated successfully!', 'success');
+
+        return $this->redirectTo($this->indexRoute);
     }
 
     public function render()
@@ -110,7 +115,7 @@ class PermissionComponent extends Component
                 return view('backend.admin.permission.show');
             default:
                 return view('backend.admin.permission.index', [
-                    'permissions' => $this->permissionService->getPaginatedPermissions(5,$this->search),
+                    'permissions' => $this->permissionService->getPaginatedPermissions(5, $this->search),
                 ]);
         }
     }

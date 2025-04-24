@@ -50,13 +50,13 @@ abstract class BaseCrudRepository
         return new $modelClass;
     }
 
-    public function paginateData(int $perPage = 10, array $query)
+    public function paginateData(int $perPage = 10, array $query = [])
     {
         return $this->getPaginatedResults($this->modelClass, $perPage, $query);
     }
 
     /**
-     * Summary of getAll
+     * get all model data
      * @return mixed array
      */
     public function getAll()
@@ -64,7 +64,7 @@ abstract class BaseCrudRepository
         return $this->modelClass::with(array_merge($this->defaultWith))->get();
     }
     /**
-     * Summary of getById
+     * get specific model by id
      * @param int $id
      * @param array $with
      * @return  mixed array
@@ -75,7 +75,7 @@ abstract class BaseCrudRepository
     }
 
     /**
-     * Summary of create
+     * creat a model
      * @param array $data
      * @return static::$modelClass
      */
@@ -89,7 +89,7 @@ abstract class BaseCrudRepository
     }
 
     /**
-     * Summary of update
+     * update a model
      * @param int $id
      * @param array $data
      * @param array $with
@@ -105,7 +105,7 @@ abstract class BaseCrudRepository
     }
 
     /**
-     * Summary of destroy
+     * delete model
      * @param int $id
      * @return bool
      */

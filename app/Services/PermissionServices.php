@@ -42,7 +42,7 @@ class PermissionServices
         return $this->permissionRepository->deleteData($id);
     }
 
-    public function getPaginatedPermissions($perPage = 40, $search)
+    public function getPaginatedPermissions($perPage = 40, $search = "")
     {
         // return Permission::paginate($perPage);
         // $query = Permission::query();
