@@ -7,6 +7,7 @@ use App\Services\UserServices;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\User;
+use App\Services\RoleServices;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\Features\SupportPagination\WithoutUrlPagination;
@@ -26,7 +27,7 @@ class UserComponent extends Component
 
     protected $userService;
 
-    public function boot(UserServices $userService)
+    public function boot(UserServices $userService, RoleServices $roleService)
     {
         $this->userService = $userService;
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 FORBIDDEN');
@@ -91,7 +92,7 @@ class UserComponent extends Component
     public function update()
     {
         abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 FORBIDDEN');
-        $user = User::findOrFail($this->user_id);
+        $user = $this->userService->getUserById($this->user_id);
         $user = $this->userService->updateUser($this->user_id, [
             'name' => $this->name,
             'email' => $this->email,

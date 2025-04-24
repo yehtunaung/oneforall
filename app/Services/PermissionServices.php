@@ -2,55 +2,58 @@
 
 namespace App\Services;
 
-use App\Models\Permission;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
+
+use App\Repositories\PermissionRepository;
 
 class PermissionServices
 {
+    private PermissionRepository $permissionRepository;
+
+    public function __construct(PermissionRepository $permissionRepository)
+    {
+        $this->permissionRepository = $permissionRepository;
+    }
+
     public function createPermission($data)
     {
-        $validator = Validator::make($data, [
-            'title' => 'required|string|max:255',
-        ]);
+        // $validator = $this->validtateData($data, [
+        //     'title' => 'required|string|max:255'
+        // ]);
 
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
-        return Permission::create($validator->validated());
+        // return Permission::create($validator);
+        $permission = $this->permissionRepository->createData($data);
+
+        return $permission;
     }
 
     public function getPermissionById($id)
     {
-        return Permission::findOrFail($id);
+        return $this->permissionRepository->getById($id);
     }
 
     public function updatePermission($id, $data)
     {
-        $validator = Validator::make($data, [
-            'title' => 'required|string|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
-        $permission = Permission::findOrFail($id);
-        return $permission->update($validator->validated());
+        $permission = $this->permissionRepository->updateData($id, $data);
+        return $permission;
     }
 
     public function deletePermission($id)
     {
-        $permission = Permission::findOrFail($id);
-        return $permission->delete();
+        return $this->permissionRepository->deleteData($id);
     }
 
-    public function getPaginatedPermissions($perPage = 40 ,$search)
+    public function getPaginatedPermissions($perPage = 40, $search)
     {
         // return Permission::paginate($perPage);
-        $query = Permission::query();
-        if ($search) {
-            $query->where('title', 'like', "%{$search}%");
-        }
-        return $query->paginate($perPage);
+        // $query = Permission::query();
+        // if ($search) {
+        //     $query->where('title', 'like', "%{$search}%");
+        // }
+        $query = [
+            "search" => $search,
+            "search_columns" => ["title"]
+        ];
+
+        return $this->permissionRepository->paginateData($perPage, $query);
     }
 }
