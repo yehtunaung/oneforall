@@ -1,0 +1,23 @@
+<?php
+
+namespace   App\Repositories;
+
+use App\Utils\BaseCrudRepository;
+
+
+class UserRepository extends BaseCrudRepository
+{
+    protected array $creationRules = [
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users',
+        'password' => 'required',
+        'roles' => 'required'
+    ];
+
+    protected array $updateRules = [
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,id',
+        'password' => 'nullable',
+        'roles' => 'required'
+    ];
+}

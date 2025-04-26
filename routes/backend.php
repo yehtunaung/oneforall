@@ -9,7 +9,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'), 'verified',]
     Route::get('dashboard', function () {
         return view('backend/dashboard');
     })->name('dashboard');
-    Route::get('users/{action?}/{id?}',UserComponent::class)->name('user');
+    Route::get('user/{action?}/{id?}',UserComponent::class)->name('user');
 
     Route::get('permission/{action?}/{id?}',PermissionComponent::class)->name('permission');
 

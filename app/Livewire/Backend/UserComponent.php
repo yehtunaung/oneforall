@@ -4,9 +4,12 @@ namespace App\Livewire\Backend;
 
 use App\Models\Role;
 use App\Services\UserServices;
+use App\Traits\HandleRedirections;
+use App\Traits\HandlePageState;
+use App\Traits\HandleFlashMessage;
+use App\Traits\AuthorizeRequests;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\User;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\Features\SupportPagination\WithoutUrlPagination;
@@ -14,17 +17,20 @@ use Livewire\WithPagination;
 
 class UserComponent extends Component
 {
-    use WithPagination, WithoutUrlPagination;
+    use WithPagination, WithoutUrlPagination, AuthorizeRequests, HandleRedirections, HandlePageState, HandleFlashMessage;
 
     #[Layout('backend.layouts.app')]
     public $currentPage = 'list', $name, $email, $password, $user_id, $currentUrl, $role_title;
     public $roles = [], $availableRoles;
     public $roleFilter = '';
-    public $search ='';
+    public $search = '';
 
+    protected $indexRoute = "admin/user";
+    protected $createRoute, $editRoute, $showRoute;
 
 
     protected $userService;
+    protected $roleService;
 
     public function boot(UserServices $userService)
     {
@@ -34,34 +40,30 @@ class UserComponent extends Component
 
     public function mount()
     {
-        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 FORBIDDEN');
         $this->availableRoles = Role::all();
+        $this->createRoute = "{$this->indexRoute}/create";
+        $this->editRoute = "{$this->indexRoute}/edit/*";
+        $this->showRoute = "{$this->indexRoute}/show/*";
 
-        if (request()->is('admin/users/create')) {
-            $this->currentPage = 'create';
-        } elseif (request()->is('admin/users/edit/*')) {
-            $this->edit(request()->route('id'));
-            $this->currentPage = 'edit';
-            // $this->loadUserData();
-        } elseif (request()->is('admin/users/show/*')) {
-            $this->show(request()->route('id'));
-            $this->currentPage = 'show';
-        } else {
-            $this->currentPage = 'list';
-        }
+        $this->authorizeAccess("user_access");
+        $this->determineCurrentPage([
+            $this->createRoute => "create",
+            $this->editRoute => "edit",
+            $this->showRoute => "show"
+        ]);
     }
 
     public function create()
     {
-        abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, '403 FORBIDDEN');
+        $this->verifyAuthorization("user_create");
         $this->resetPage();
-        $this->currentPage = 'create';
+        $this->currentPage = "create";
     }
 
 
     public function store()
     {
-        abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, '403 FORBIDDEN');
+        $this->verifyAuthorization("permission_create");
         $user = $this->userService->createUser([
             'name' => $this->name,
             'email' => $this->email,
@@ -70,15 +72,13 @@ class UserComponent extends Component
         ]);
 
         $user->roles()->sync($this->roles);
-
-        session()->flash('message', 'User created successfully!');
-        session()->flash('type', 'success');
-        return $this->redirect('/admin/users', navigate: true);
+        $this->flashMessage('User created successfully!', 'success');
+        return $this->redirectTo($this->indexRoute);
     }
 
     public function edit($id)
     {
-        abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 FORBIDDEN');
+        $this->verifyAuthorization('user_edit');
         $user = $this->userService->getUserById($id);
         $this->user_id = $user->id;
         $this->name = $user->name;
@@ -90,8 +90,8 @@ class UserComponent extends Component
 
     public function update()
     {
-        abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 FORBIDDEN');
-        $user = User::findOrFail($this->user_id);
+        $this->verifyAuthorization('user_edit');
+        $user = $this->userService->getUserById($this->user_id);
         $user = $this->userService->updateUser($this->user_id, [
             'name' => $this->name,
             'email' => $this->email,
@@ -99,15 +99,15 @@ class UserComponent extends Component
             'password' => $this->password ? bcrypt($this->password) : $user->password,
         ]);
         $user->roles()->sync($this->roles);
-        session()->flash('message', 'User updated successfully!');
-        session()->flash('type', 'success');
-        return $this->redirect('/admin/users', navigate: true);
+        $this->flashMessage('User updated successfully!', 'success');
+        
+        return $this->redirectTo($this->indexRoute);
     }
 
 
     private function show($id)
     {
-        abort_if(Gate::denies('user_show'), Response::HTTP_FORBIDDEN, '403 FORBIDDEN');
+        $this->verifyAuthorization("user_show");
         $user = $this->userService->getUserById($id);
         $this->user_id = $user->id;
         $this->name = $user->name;
@@ -117,15 +117,16 @@ class UserComponent extends Component
     }
     public function delete($id)
     {
-        abort_if(Gate::denies('user_delete'), Response::HTTP_FORBIDDEN, '403 FORBIDDEN');
+        $this->verifyAuthorization("user_delete");
         $this->userService->deleteUser($id);
-        session()->flash('message', 'User deleted successfully!');
-        session()->flash('type', 'success');
-        return $this->redirect('/admin/users', navigate: true);
+        $this->flashMessage( 'User deleted successfully!','success');
+        return $this->redirectTo($this->indexRoute);
     }
 
 
-    public function filterUsers() {}
+    public function filterUsers()
+    {
+    }
 
     public function render()
     {
@@ -143,7 +144,7 @@ class UserComponent extends Component
             default:
                 return view('backend.admin.user.index', [
                     'availableRoles' => $this->availableRoles,
-                    'users' => $this->userService->getAllUsers(10, $this->roleFilter,$this->search),
+                    'users' => $this->userService->getAllUsers(10, $this->roleFilter, $this->search),
                 ]);
         }
     }

@@ -82,32 +82,39 @@
                         </td>
                         <td class="px-6 py-4">{{ $user->created_at ? $user->created_at->format('d M, Y') : '-' }}</td>
                         <td class="px-6 py-4 relative">
-                            <x-admin.action-dropdown>
-                                @can('user_show')
-                                    <li class="hover:bg-gray-100 dark:hover:bg-gray-600">
-                                        <a href="{{ route('admin.user', ['action' => 'show', 'id' => $user->id]) }}"
-                                            class="flex items-center gap-2 px-4 py-2" wire:navigate>
-                                            <i class="fa-solid fa-eye"></i> Show
-                                        </a>
-                                    </li>
-                                @endcan
-                                @can('user_edit')
-                                    <li class="hover:bg-gray-100 dark:hover:bg-gray-600">
-                                        <button href="{{ route('admin.user', ['action' => 'edit', 'id' => $user->id]) }}"
-                                            class="flex items-center gap-2 px-4 py-2" wire:navigate>
-                                            <i class="fa-solid fa-edit"></i> Edit
-                                        </button>
-                                    </li>
-                                @endcan
-                                @can('user_delete')
-                                    <li class="hover:bg-gray-100 dark:hover:bg-gray-600">
-                                        <a href="#" class="flex items-center gap-2 px-4 py-2"
-                                            wire:click.prevent='delete({{ $user->id }})' wire:confirm='Are you sure?'>
-                                            <i class="fa-solid fa-trash"></i> Delete
-                                        </a>
-                                    </li>
-                                @endcan
+                            @php
+                                $protectedRoles = ["Admin"]; // protect admin account
+                                $hasProtectedRoles = $user->roles->pluck("title")->intersect($protectedRoles)->isNotEmpty();
+                            @endphp
+                           
+                            @if (!$hasProtectedRoles)
+                                <x-admin.action-dropdown>
+                                    @can('user_show')
+                                        <li class="hover:bg-gray-100 dark:hover:bg-gray-600">
+                                            <a href="{{ route('admin.user', ['action' => 'show', 'id' => $user->id]) }}"
+                                                class="flex items-center gap-2 px-4 py-2" wire:navigate>
+                                                <i class="fa-solid fa-eye"></i> Show
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('user_edit')
+                                        <li class="hover:bg-gray-100 dark:hover:bg-gray-600">
+                                            <button href="{{ route('admin.user', ['action' => 'edit', 'id' => $user->id]) }}"
+                                                class="flex items-center gap-2 px-4 py-2" wire:navigate>
+                                                <i class="fa-solid fa-edit"></i> Edit
+                                            </button>
+                                        </li>
+                                    @endcan
+                                    @can('user_delete')
+                                        <li class="hover:bg-gray-100 dark:hover:bg-gray-600">
+                                            <a href="#" class="flex items-center gap-2 px-4 py-2"
+                                                wire:click.prevent='delete({{ $user->id }})' wire:confirm='Are you sure?'>
+                                                <i class="fa-solid fa-trash"></i> Delete
+                                            </a>
+                                        </li>
+                                    @endcan
                                 </x-action-dropdown>
+                            @endif
                         </td>
                     </tr>
                 @empty
