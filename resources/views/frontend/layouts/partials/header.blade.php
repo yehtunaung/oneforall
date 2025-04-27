@@ -3,7 +3,6 @@
         <!-- Logo -->
         <div>
             <a href="/" class="text-2xl font-bold text-white hover:text-blue-500 transition duration-300">
-                <img src="https://placehold.co/150x150" alt="Logo" class="h-10 w-10 rounded-full">
                 One For All
             </a>
         </div>
