@@ -14,11 +14,11 @@
                 countdown.seconds = Math.floor((distance % (1000 * 60)) / 1000);
             }, 1000);">
                 <!-- Company Logo -->
-                <img src="https://placehold.co/150x150" alt="ImpactTech Logo"
+                <img src="https://placehold.co/150x150" alt="OneForAll"
                     class="mx-auto mb-6 rounded-full animate-pulse">
 
                 <!-- Heading -->
-                <h1 class="text-6xl font-bold mb-4 animate-bounce">ImpactTech</h1>
+                <h1 class="text-6xl font-bold mb-4 animate-bounce">One For All</h1>
                 <p class="text-xl mb-8">Empowering your world with unified solutions. Something incredible is on the way!
                 </p>
 
